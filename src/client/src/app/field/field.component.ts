@@ -117,7 +117,8 @@ export class FieldComponent implements AfterViewInit, OnChanges {
       this.playerSize,
       this.playerColor,
       'black',
-      this.player?.name ?? DEFAULT_PLAYER_NAME
+      this.player?.name ?? DEFAULT_PLAYER_NAME,
+      this.player?.power
     );
   }
 
@@ -214,7 +215,8 @@ export class FieldComponent implements AfterViewInit, OnChanges {
     size: number,
     fillColor: string,
     strokeColor: string,
-    label?: string
+    label?: string,
+    power?: number,
   ) {
     if (!this.ctx) {
       return;
@@ -230,6 +232,11 @@ export class FieldComponent implements AfterViewInit, OnChanges {
       this.ctx.textAlign = 'center';
       const nameHeight = Number(/\d+/.exec(this.ctx.font));
       this.ctx.fillText(label, x, y - nameHeight - 0.2 * this.playerSize);
+    }
+    if (power) {
+      this.ctx.textAlign = 'center';
+      const nameHeight = Number(/\d+/.exec(this.ctx.font));
+      this.ctx.fillText(`+${power}`, x, y - nameHeight - 1.8 * this.playerSize);
     }
   }
 }

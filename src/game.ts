@@ -50,6 +50,7 @@ export class Game {
       id,
       name,
       score: 1,
+      power: 0,
     });
   }
 

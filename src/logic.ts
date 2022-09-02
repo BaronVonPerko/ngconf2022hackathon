@@ -12,7 +12,8 @@ export function getInitialState(): IGameState {
       width: 100,
       height: 100
     },
-    eliminatedPlayers: {}
+    eliminatedPlayers: {},
+    gameLoad: false
   };
 }
 
@@ -22,7 +23,12 @@ export function gameLogic(state: IGameState, commands: Commands): IGameState {
   resolveWeaponCollisions(state);
   resolvePlayerCollisions(state);
   addMoreCoins(state);
-  addMoreWeapons(state);
+
+  if (!state.gameLoad) {
+    addWeapons(state);
+  }
+  state.gameLoad = true;
+
   return state;
 }
 
@@ -116,10 +122,10 @@ function addMoreCoins(state: IGameState) {
   }
 }
 
-function addMoreWeapons(state: IGameState) {
+function addWeapons(state: IGameState) {
   while (state.weapons.length < weaponCount) {
     const location = getUnoccupiedLocation(state);
-    const power = (Math.random() * 3) * 5 as 5 | 10 | 15;
+    const power = Math.floor((Math.random() * 3) * 5);
     state.weapons.push({ ...location, power });
   }
 }
