@@ -170,8 +170,14 @@ function handleMeteors(state: IGameState) {
     state.lastMeteorSpawnTime = newSpawnTime;
 
     const location = getUnoccupiedLocation(state);
-    const velocityX = Math.floor(Math.random() * 3) - 1;
-    const velocityY = Math.floor(Math.random() * 3) - 1;
+    let velocityX = Math.floor(Math.random() * 3) - 1;
+    let velocityY = Math.floor(Math.random() * 3) - 1;
+
+    if (velocityY === 0 && velocityX === 0) {
+      velocityX = 1;
+      velocityY = 1;
+    }
+
     state.meteors.push({ ...location, launchTimer: 15, velocityX, velocityY, visible: true });
   }
 }
