@@ -15,6 +15,8 @@ export function getInitialState(): IGameState {
     eliminatedPlayers: {},
     gameLoad: false,
     meteors: [],
+    meteorSpawnCounter: 200,
+    lastMeteorSpawnTime: 200,
   };
 }
 
@@ -24,6 +26,7 @@ export function gameLogic(state: IGameState, commands: Commands): IGameState {
   resolveWeaponCollisions(state);
   resolvePlayerCollisions(state);
   addMoreCoins(state);
+  handleMeteors(state);
 
   if (!state.gameLoad) {
     addWeapons(state);
@@ -129,6 +132,32 @@ function addWeapons(state: IGameState) {
     const location = getUnoccupiedLocation(state);
     const power = Math.floor((Math.random() * 3) * 5);
     state.weapons.push({ ...location, power });
+  }
+}
+
+function handleMeteors(state: IGameState) {
+  state.meteorSpawnCounter -= 1;
+
+  state.meteors.forEach(meteor => {
+    if (meteor.launchTimer) {
+      meteor.visible = !meteor.visible;
+      meteor.launchTimer--;
+    } else {
+      meteor.visible = true;
+      meteor.x += meteor.velocityX;
+      meteor.y += meteor.velocityY;
+    }
+  });
+
+  if (state.meteorSpawnCounter <= 0) {
+    const newSpawnTime = state.lastMeteorSpawnTime === 20 ? 20 : state.lastMeteorSpawnTime - 20;
+    state.meteorSpawnCounter = newSpawnTime;
+    state.lastMeteorSpawnTime = newSpawnTime;
+
+    const location = getUnoccupiedLocation(state);
+    const velocityX = Math.floor(Math.random() * 3) - 1;
+    const velocityY = Math.floor(Math.random() * 3) - 1;
+    state.meteors.push({ ...location, launchTimer: 15, velocityX, velocityY, visible: true });
   }
 }
 

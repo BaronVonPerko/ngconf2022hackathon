@@ -12,6 +12,7 @@ import { IPlayer, IGameState } from '../../../../models';
 
 const DEFAULT_COIN_COLOR = 'yellow';
 const DEFAULT_WEAPON_COLOR = 'green';
+const DEFAULT_METEOR_COLOR = 'orange';
 const DEFAULT_OTHER_PLAYER_COLOR = 'red';
 const DEFAULT_PLAYER_COLOR = 'blue';
 const DEFAULT_PLAYER_NAME = 'You';
@@ -76,6 +77,7 @@ export class FieldComponent implements AfterViewInit, OnChanges {
     this.drawTokens();
     this.drawOtherPlayers();
     this.drawPlayer();
+    this.drawMeteors();
   }
 
   getCanvasCoordinatesFromStateCoordinates(
@@ -156,6 +158,28 @@ export class FieldComponent implements AfterViewInit, OnChanges {
       const power = weapon.weapon.power;
 
       this.drawCircle(x, y, this.playerSize * (power / 5), DEFAULT_WEAPON_COLOR, 'gray')
+    }
+  }
+
+  drawMeteors() {
+    if (!this.canvas || !this.ctx || !this.state) {
+      return;
+    }
+
+    const visibleMeteors = this.state.meteors
+      .map((m) => ({
+        meteor: m,
+        canvasCoord: this.getCanvasCoordinatesFromStateCoordinates(m.x, m.y),
+      }))
+      .filter(w => w.canvasCoord);
+
+    for (let meteor of visibleMeteors) {
+      const x = meteor.canvasCoord!.x;
+      const y = meteor.canvasCoord!.y;
+
+      if (meteor.meteor.visible) {
+        this.drawCircle(x, y, this.playerSize, DEFAULT_METEOR_COLOR, 'gray');
+      }
     }
   }
 

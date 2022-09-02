@@ -9,6 +9,8 @@ export interface IGameState {
   weapons: IWeapon[];
   gameLoad: boolean;
   meteors: IMeteor[];
+  meteorSpawnCounter: number;
+  lastMeteorSpawnTime: number;
 }
 
 export interface IPlayer {
@@ -37,6 +39,8 @@ export interface IMeteor {
   y: number;
   velocityX: number;
   velocityY: number;
+  launchTimer: number;
+  visible: boolean;
 }
 
 export type Command = 'left' | 'right' | 'up' | 'down';
