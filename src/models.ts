@@ -8,6 +8,7 @@ export interface IGameState {
   eliminatedPlayers: Record<string, string>;
   weapons: IWeapon[];
   gameLoad: boolean;
+  meteors: IMeteor[];
 }
 
 export interface IPlayer {
@@ -29,6 +30,13 @@ export interface IWeapon {
   x: number;
   y: number;
   power: number;
+}
+
+export interface IMeteor {
+  x: number;
+  y: number;
+  velocityX: number;
+  velocityY: number;
 }
 
 export type Command = 'left' | 'right' | 'up' | 'down';

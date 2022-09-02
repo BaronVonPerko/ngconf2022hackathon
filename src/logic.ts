@@ -13,7 +13,8 @@ export function getInitialState(): IGameState {
       height: 100
     },
     eliminatedPlayers: {},
-    gameLoad: false
+    gameLoad: false,
+    meteors: [],
   };
 }
 
