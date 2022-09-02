@@ -11,6 +11,7 @@ import {
 import { IPlayer, IGameState } from '../../../../models';
 
 const DEFAULT_COIN_COLOR = 'yellow';
+const DEFAULT_WEAPON_COLOR = 'green';
 const DEFAULT_OTHER_PLAYER_COLOR = 'red';
 const DEFAULT_PLAYER_COLOR = 'blue';
 const DEFAULT_PLAYER_NAME = 'You';
@@ -125,6 +126,7 @@ export class FieldComponent implements AfterViewInit, OnChanges {
       return;
     }
 
+    // draw the coins
     const visibleCoins = this.state.coins
       .map((c) => ({
         coin: c,
@@ -137,6 +139,22 @@ export class FieldComponent implements AfterViewInit, OnChanges {
       const y = coin.canvasCoord!.y;
 
       this.drawCircle(x, y, this.playerSize, DEFAULT_COIN_COLOR, 'gray');
+    }
+
+    // draw the weapons
+    const visibleWeapons = this.state.weapons
+      .map((w) => ({
+        weapon: w,
+        canvasCoord: this.getCanvasCoordinatesFromStateCoordinates(w.x, w.y),
+      }))
+      .filter(w => w.canvasCoord);
+
+    for (let weapon of visibleWeapons) {
+      const x = weapon.canvasCoord!.x;
+      const y = weapon.canvasCoord!.y;
+      const power = weapon.weapon.power;
+
+      this.drawCircle(x, y, this.playerSize * (power / 5), DEFAULT_WEAPON_COLOR, 'gray')
     }
   }
 

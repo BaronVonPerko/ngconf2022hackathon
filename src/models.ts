@@ -6,6 +6,7 @@ export interface IGameState {
     height: number;
   };
   eliminatedPlayers: Record<string, string>;
+  weapons: IWeapon[];
 }
 
 export interface IPlayer {
@@ -14,12 +15,19 @@ export interface IPlayer {
   score: number;
   x: number;
   y: number;
+  power: number;
 }
 
 export interface ICoin {
   x: number;
   y: number;
   isDeadly?: boolean;
+}
+
+export interface IWeapon {
+  x: number;
+  y: number;
+  power: 5 | 10 | 15;
 }
 
 export type Command = 'left' | 'right' | 'up' | 'down';

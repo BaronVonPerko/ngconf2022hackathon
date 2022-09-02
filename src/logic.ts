@@ -1,24 +1,28 @@
 import { Commands, IGameState, IPlayer } from './models';
 
 const coinCount = 100;
+const weaponCount = 5;
 
 export function getInitialState(): IGameState {
   return {
     players: [],
     coins: [],
+    weapons: [],
     fieldSize: {
       width: 100,
-      height: 100,
+      height: 100
     },
-    eliminatedPlayers: {},
+    eliminatedPlayers: {}
   };
 }
 
 export function gameLogic(state: IGameState, commands: Commands): IGameState {
   evaluateCommands(state, commands);
   resolveCoinCollisions(state);
+  resolveWeaponCollisions(state);
   resolvePlayerCollisions(state);
   addMoreCoins(state);
+  addMoreWeapons(state);
   return state;
 }
 
@@ -67,6 +71,16 @@ function resolveCoinCollisions(state: IGameState) {
   });
 }
 
+function resolveWeaponCollisions(state: IGameState) {
+  state.weapons.slice().forEach(weapon => {
+    const player = state.players.find(p => p.x === weapon.x && p.y === weapon.y);
+    if (player) {
+      player.power += weapon.power;
+      state.weapons = state.weapons.filter(w => w !== weapon);
+    }
+  });
+}
+
 function resolvePlayerCollisions(state: IGameState) {
   state.players.slice().forEach((player) => {
     if (!state.players.includes(player)) {
@@ -102,6 +116,14 @@ function addMoreCoins(state: IGameState) {
   }
 }
 
+function addMoreWeapons(state: IGameState) {
+  while (state.weapons.length < weaponCount) {
+    const location = getUnoccupiedLocation(state);
+    const power = (Math.random() * 3) * 5 as 5 | 10 | 15;
+    state.weapons.push({ ...location, power });
+  }
+}
+
 export function getUnoccupiedLocation(state: IGameState): {
   x: number;
   y: number;
@@ -114,6 +136,9 @@ export function getUnoccupiedLocation(state: IGameState): {
       continue;
     }
     if (state.coins.find((c) => c.x === x && c.y === y)) {
+      continue;
+    }
+    if (state.weapons.find((c) => c.x === x && c.y === y)) {
       continue;
     }
     location = { x, y };
