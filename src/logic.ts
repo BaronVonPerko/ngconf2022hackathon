@@ -15,8 +15,8 @@ export function getInitialState(): IGameState {
     eliminatedPlayers: {},
     gameLoad: false,
     meteors: [],
-    meteorSpawnCounter: 200,
-    lastMeteorSpawnTime: 200
+    meteorSpawnCounter: 100,
+    lastMeteorSpawnTime: 100
   };
 }
 
