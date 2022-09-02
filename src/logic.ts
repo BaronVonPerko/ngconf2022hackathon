@@ -16,7 +16,7 @@ export function getInitialState(): IGameState {
     gameLoad: false,
     meteors: [],
     meteorSpawnCounter: 200,
-    lastMeteorSpawnTime: 200,
+    lastMeteorSpawnTime: 200
   };
 }
 
@@ -25,6 +25,7 @@ export function gameLogic(state: IGameState, commands: Commands): IGameState {
   resolveCoinCollisions(state);
   resolveWeaponCollisions(state);
   resolvePlayerCollisions(state);
+  resolveMeteorCollisions(state);
   addMoreCoins(state);
   handleMeteors(state);
 
@@ -116,6 +117,20 @@ function resolvePlayerCollisions(state: IGameState) {
       state.players = state.players.filter((p) => p !== loser);
       state.eliminatedPlayers[loser.id] = winner.id;
     }
+  });
+}
+
+function resolveMeteorCollisions(state: IGameState) {
+  state.players.slice().forEach((player) => {
+
+    const meteor = state.meteors.find(m => m.x === player.x && m.y === player.y);
+
+    if (meteor) {
+      state.meteors = state.meteors.filter(m => m !== meteor);
+      player.power = 0;
+      player.score = 0;
+    }
+
   });
 }
 
