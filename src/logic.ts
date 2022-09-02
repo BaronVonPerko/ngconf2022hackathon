@@ -96,11 +96,11 @@ function resolvePlayerCollisions(state: IGameState) {
       (p) => p !== player && p.x === player.x && p.y === player.y
     );
     if (otherPlayer) {
-      const pool = 2;
+      const pool = (player.power || 1) + (otherPlayer.power || 1);
       const roll = Math.floor(Math.random() * pool);
       let winner: IPlayer;
       let loser: IPlayer;
-      if (roll === 1) {
+      if (roll <= (player.power || 1)) {
         winner = player;
         loser = otherPlayer;
       } else {
@@ -108,6 +108,7 @@ function resolvePlayerCollisions(state: IGameState) {
         loser = player;
       }
       winner.score += loser.score;
+      winner.power += loser.power;
       state.players = state.players.filter((p) => p !== loser);
       state.eliminatedPlayers[loser.id] = winner.id;
     }
