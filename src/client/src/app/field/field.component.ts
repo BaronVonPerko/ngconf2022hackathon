@@ -206,7 +206,8 @@ export class FieldComponent implements AfterViewInit, OnChanges {
         this.playerSize,
         DEFAULT_OTHER_PLAYER_COLOR,
         'black',
-        p.player.name
+        p.player.name,
+        p.player.power
       );
     }
   }

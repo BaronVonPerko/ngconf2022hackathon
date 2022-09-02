@@ -124,7 +124,7 @@ function resolveMeteorCollisions(state: IGameState) {
   state.players.slice().forEach((player) => {
 
     const meteor = state.meteors
-      .filter(m => m.launchTimer)
+      .filter(m => m.launchTimer <= 0)
       .find(m => m.x === player.x && m.y === player.y);
 
     if (meteor) {
